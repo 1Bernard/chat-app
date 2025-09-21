@@ -1,18 +1,30 @@
 import useSWR from 'swr';
-import { Message } from '../types';
+import { Message, ApiMessage } from '../types';
 import { api } from '../lib/api';
 
-const fetcher = (url: string) => api.get(url).then(res => res.data);
+const fetcher = (url: string) => api.get(url).then(res => {
+  console.log('Messages API response:', res.data);
+  return res.data;
+});
 
 export const useMessages = (conversationId: number | null) => {
-  const { data, error, mutate } = useSWR<{ data: Message[] }>(
+  const { data, error, mutate } = useSWR<{ data: ApiMessage[] }>(
     conversationId ? `/conversations/${conversationId}/messages` : null,
     fetcher,
-    { refreshInterval: 1000 } // Poll for new messages
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0
+    }
   );
 
+  // Extract messages from JSON:API response
+  const messages = data?.data.map(item => item.attributes) || [];
+
+  console.log('Processed messages:', messages);
+
   return {
-    messages: data?.data || [],
+    messages,
     isLoading: !error && !data,
     isError: error,
     mutate

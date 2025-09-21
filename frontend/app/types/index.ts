@@ -6,6 +6,12 @@ export interface Message {
   created_at: string;
 }
 
+export interface ApiMessage {
+  id: string;
+  type: string;
+  attributes: Message;
+}
+
 export interface Conversation {
   id: number;
   title: string;
