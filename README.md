@@ -53,7 +53,7 @@ chat-app/
 ### Using Docker (Recommended)
 1. Clone the repository:
    ```bash
-   git clone https://github.com/1Bernard/chat-app.git
+   [`git clone https://github.com/1Bernard/chat-app.git`](https://github.com/1Bernard/chat-app.git)
    cd chat-app
    ```
 
