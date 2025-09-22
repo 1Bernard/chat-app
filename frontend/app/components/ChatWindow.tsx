@@ -6,7 +6,8 @@ import {
   TextField,
   IconButton,
   Typography,
-  CircularProgress
+  CircularProgress,
+  InputAdornment
 } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import { Conversation, AnyMessage, TempMessage, isTempMessage } from '../types';
@@ -129,32 +130,34 @@ export default function ChatWindow({ conversation }: ChatWindowProps) {
         <div ref={messagesEndRef} />
       </Box>
 
-      {/* Input */}
+      {/* Input with Send inside */}
       <Box className="p-4 border-t border-gray-200 bg-white">
-        <Box className="flex items-center space-x-2">
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Reply to Chatbot"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            disabled={isSending || !conversation}
-            multiline
-            maxRows={4}
-            className="rounded-full bg-[#ECE6F0]"
-            InputProps={{
-              classes: { notchedOutline: '!border-0' },
-            }}
-          />
-          <IconButton
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isSending || !conversation}
-            className="bg-purple-500 hover:bg-purple-600 text-white rounded-full p-2"
-          >
-            {isSending ? <CircularProgress size={24} className="text-white" /> : <Send />}
-          </IconButton>
-        </Box>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Reply to Chatbot"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+          disabled={isSending || !conversation}
+          multiline
+          maxRows={4}
+          className="rounded-full bg-[#ECE6F0]"
+          InputProps={{
+            classes: { notchedOutline: '!border-0' },
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleSendMessage}
+                  disabled={!inputValue.trim() || isSending || !conversation}
+                  className="text-purple-600"
+                >
+                  {isSending ? <CircularProgress size={20} className="text-purple-600" /> : <Send />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
       </Box>
     </Box>
   );

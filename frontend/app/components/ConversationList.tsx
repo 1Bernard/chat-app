@@ -97,7 +97,6 @@ export default function ConversationList({
 
   return (
     <Box sx={{ width: '100%' }} className="p-2">
-      {/* + Conversations button - kept logic & icons intact, styled with Tailwind */}
       <Button
         variant="contained"
         startIcon={<Add />}
