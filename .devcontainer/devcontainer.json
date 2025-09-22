@@ -8,7 +8,13 @@
   "shutdownAction": "stopCompose",
   "forwardPorts": [3000, 3001],
   "remoteEnv": {
-    "RAILS_ENV": "development"
+    "RAILS_ENV": "development",
+    "DB_ADAPTER": "postgresql",
+    "DB_HOST": "aws-1-eu-north-1.pooler.supabase.com",
+    "DB_PORT": "5432",
+    "DB_NAME": "postgres",
+    "DB_USER": "postgres.vcsjdsougxtjtmgcodqe",
+    "DB_PASSWORD": "dkfH/-5cThjR45/"
   },
   "customizations": {
     "vscode": {
@@ -19,5 +25,5 @@
       ]
     }
   },
-  "postCreateCommand": "docker-compose up --build -d && docker-compose exec backend rails db:create db:migrate && docker-compose logs -f"
+  "postCreateCommand": "docker compose up --build -d && docker compose exec backend rails db:create db:migrate && docker compose logs -f"
 }
