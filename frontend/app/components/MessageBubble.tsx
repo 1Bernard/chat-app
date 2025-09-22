@@ -1,16 +1,14 @@
-import { Message } from '../types';
+import { AnyMessage } from '../types';
 import { formatRailsDate } from '../utils/date';
 
 interface MessageBubbleProps {
-  message: Message;
+  message: AnyMessage;
+  isOptimistic?: boolean;
 }
 
-export default function MessageBubble({ message }: MessageBubbleProps) {
+export default function MessageBubble({ message, isOptimistic = false }: MessageBubbleProps) {
   const isUser = message.role === 'user';
   const timestamp = formatRailsDate(message.created_at);
-
-  // Debug: log the message content
-  console.log('Message data:', message);
 
   return (
     <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -23,9 +21,13 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
               <i className="fas fa-robot text-sm"></i>
             )}
           </div>
-          <div className={`${isUser ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-2xl`}>
-            {/* Add a fallback in case content is empty */}
-            {message.content || '(Empty message)'}
+          <div className={`${isUser ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-2xl ${isOptimistic ? 'opacity-80' : ''}`}>
+            {message.content}
+            {isOptimistic && (
+              <span className="ml-2 text-xs opacity-70">
+                <i className="fas fa-circle-notch fa-spin"></i>
+              </span>
+            )}
           </div>
         </div>
         {timestamp && (

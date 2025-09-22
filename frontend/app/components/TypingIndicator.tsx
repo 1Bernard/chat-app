@@ -1,6 +1,6 @@
 export default function TypingIndicator() {
   return (
-    <div className="flex items-start space-x-2">
+    <div className="flex items-start space-x-2 mb-4">
       <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white">
         <i className="fas fa-robot"></i>
       </div>

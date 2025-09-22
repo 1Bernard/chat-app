@@ -30,37 +30,28 @@ export default function ConversationList({
   const [isCreating, setIsCreating] = useState(false);
   const [nextConversationNumber, setNextConversationNumber] = useState(1);
 
-  // Calculate the next conversation number when conversations change
   useEffect(() => {
-  if (conversations.length > 0) {
-    // Extract numbers from existing conversation titles
-    const numbers = conversations.map(conv => {
-      const match = conv.title?.match(/Conversation (\d+)/);
-      return match ? parseInt(match[1], 10) : 0;
-    });
-    
-    // Find the highest number and add 1
-    const maxNumber = Math.max(...numbers, 0);
-    setNextConversationNumber(maxNumber + 1);
-  } else {
-    setNextConversationNumber(1);
-  }
-}, [conversations]);
+    if (conversations.length > 0) {
+      const numbers = conversations.map(conv => {
+        if (!conv.title) return 0;
+        const match = conv.title.match(/Conversation (\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+      });
+      const maxNumber = Math.max(...numbers, 0);
+      setNextConversationNumber(maxNumber + 1);
+    } else {
+      setNextConversationNumber(1);
+    }
+  }, [conversations]);
 
   const handleCreateConversation = async () => {
     try {
       setIsCreating(true);
-      
-      // Generate a title with sequential numbering
       const title = `Conversation ${nextConversationNumber}`;
-      
       const response = await api.post('/conversations', {
         conversation: { title }
       });
-      
-      // Wait a moment for the backend to create the initial message
       await new Promise(resolve => setTimeout(resolve, 500));
-      
       mutate();
       onSelectConversation(response.data.data);
     } catch (error) {
@@ -105,18 +96,18 @@ export default function ConversationList({
   }
 
   return (
-    <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6">Conversations</Typography>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={handleCreateConversation}
-          disabled={isCreating}
-        >
-          {isCreating ? <CircularProgress size={16} /> : 'New'}
-        </Button>
-      </Box>
+    <Box sx={{ width: '100%' }} className="p-2">
+      {/* + Conversations button - kept logic & icons intact, styled with Tailwind */}
+      <Button
+        variant="contained"
+        startIcon={<Add />}
+        onClick={handleCreateConversation}
+        disabled={isCreating}
+        className="w-full justify-center !bg-purple-500 hover:!bg-purple-600 text-white font-semibold rounded-xl py-2 px-4 mb-4 normal-case"
+      >
+        {isCreating ? <CircularProgress size={16} color="inherit" /> : 'Conversations'}
+      </Button>
+
       <List>
         {conversations.map((conversation) => (
           <ListItem
@@ -136,13 +127,14 @@ export default function ConversationList({
             <ListItemButton
               selected={selectedConversation?.id === conversation.id}
               onClick={() => onSelectConversation(conversation)}
+              className={selectedConversation?.id === conversation.id ? 'bg-purple-200' : ''}
             >
               <ListItemText
                 primary={
-                  <Typography 
-                    noWrap 
+                  <Typography
+                    noWrap
                     title={conversation.title || `Conversation ${conversation.id}`}
-                    sx={{ fontWeight: selectedConversation?.id === conversation.id ? 'bold' : 'normal' }}
+                    className={selectedConversation?.id === conversation.id ? 'font-semibold' : ''}
                   >
                     {conversation.title || `Conversation ${conversation.id}`}
                   </Typography>
