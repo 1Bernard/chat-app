@@ -1,0 +1,23 @@
+{
+  "name": "Chat App Dev Container",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "backend",
+  "workspaceFolder": "/app",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [3000, 3001],
+  "remoteEnv": {
+    "RAILS_ENV": "development"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rebornix.ruby",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  "postCreateCommand": "docker-compose up --build -d && docker-compose exec backend rails db:create db:migrate && docker-compose logs -f"
+}
