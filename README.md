@@ -51,11 +51,11 @@ chat-app/
 2. Fill in your Supabase database credentials in `.env`.
 
 ### Using Docker (Recommended)
-1. Clone the repository:
-   ```bash
-   [git clone https://github.com/1Bernard/chat-app.git](https://github.com/1Bernard/chat-app)
-   cd chat-app
-   ```
+1. Clone the repository:  
+[`git clone https://github.com/1Bernard/chat-app.git`](https://github.com/1Bernard/chat-app)  
+Then enter the project folder:  
+```bash
+cd chat-app
 
 2. Start the application:
    ```bash
