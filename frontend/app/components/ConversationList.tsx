@@ -10,7 +10,10 @@ import {
   Box,
   Typography,
   Button,
-  CircularProgress
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogActions,
 } from '@mui/material';
 import { Delete, Add } from '@mui/icons-material';
 import { Conversation } from '../types';
@@ -29,6 +32,10 @@ export default function ConversationList({
   const { conversations, isLoading, isError, mutate } = useConversations();
   const [isCreating, setIsCreating] = useState(false);
   const [nextConversationNumber, setNextConversationNumber] = useState(1);
+
+  // modal state
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [conversationToDelete, setConversationToDelete] = useState<Conversation | null>(null);
 
   useEffect(() => {
     if (conversations.length > 0) {
@@ -61,16 +68,25 @@ export default function ConversationList({
     }
   };
 
-  const handleDeleteConversation = async (id: number, e: React.MouseEvent) => {
+  const confirmDeleteConversation = (conversation: Conversation, e: React.MouseEvent) => {
     e.stopPropagation();
+    setConversationToDelete(conversation);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleDeleteConversation = async () => {
+    if (!conversationToDelete) return;
     try {
-      await api.delete(`/conversations/${id}`);
+      await api.delete(`/conversations/${conversationToDelete.id}`);
       mutate();
-      if (selectedConversation?.id === id) {
+      if (selectedConversation?.id === conversationToDelete.id) {
         onSelectConversation(null);
       }
     } catch (error) {
       console.error('Failed to delete conversation:', error);
+    } finally {
+      setOpenDeleteDialog(false);
+      setConversationToDelete(null);
     }
   };
 
@@ -116,7 +132,7 @@ export default function ConversationList({
               <IconButton
                 edge="end"
                 aria-label="delete"
-                onClick={(e) => handleDeleteConversation(conversation.id, e)}
+                onClick={(e) => confirmDeleteConversation(conversation, e)}
                 size="small"
               >
                 <Delete />
@@ -143,6 +159,41 @@ export default function ConversationList({
           </ListItem>
         ))}
       </List>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        PaperProps={{
+          sx: {
+            borderRadius: "12px",
+            padding: "16px",
+            maxWidth: "445px",   // instead of 600px
+            width: "100%",
+          },
+        }}
+      >
+        <DialogTitle className="text-center">
+          Are you sure you want to delete{" "}
+          {conversationToDelete?.title || `Conversation ${conversationToDelete?.id}`}?
+        </DialogTitle>
+        <DialogActions className="flex !justify-center space-x-4 pb-4">
+          <Button
+            onClick={() => setOpenDeleteDialog(false)}
+            className="!bg-[#EADDFF] !text-black !rounded-full px-6 normal-case"
+            sx={{ minWidth: "189px" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConversation}
+            className="!bg-red-700 hover:!bg-red-800 !text-white !rounded-full px-6 normal-case"
+            sx={{ minWidth: "189px" }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
