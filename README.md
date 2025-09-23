@@ -7,6 +7,7 @@ A real-time chat application built with Next.js (frontend) and Ruby on Rails (ba
 <img width="381" height="828" alt="Screenshot 2025-09-23 135931" src="https://github.com/user-attachments/assets/dd7b87a2-3f42-4ac7-8aa9-491ad418cf8e" />
 <img width="379" height="828" alt="Screenshot 2025-09-23 140031" src="https://github.com/user-attachments/assets/277a6d46-2e71-46ef-9894-860b3d9fa5ea" />
 <img width="387" height="828" alt="Screenshot 2025-09-23 140056" src="https://github.com/user-attachments/assets/f628030e-4eca-41e5-b923-3af1c5c17e2d" />
+<img width="1673" height="936" alt="Screenshot 2025-09-23 164714" src="https://github.com/user-attachments/assets/43eccb49-f1d8-4f31-a71e-1097e5f2d782" />
 
 ## Features
 
