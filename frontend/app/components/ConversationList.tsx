@@ -188,14 +188,18 @@ export default function ConversationList({
           <Button
             onClick={() => setOpenDeleteDialog(false)}
             className="!bg-[#EADDFF] !text-black !rounded-full px-6 normal-case"
-            sx={{ minWidth: "189px" }}
+            sx={{
+              minWidth: { xs: '123px', sm: '123px', md: '189px' }, // mobile vs desktop
+            }}
           >
             Cancel
           </Button>
           <Button
             onClick={handleDeleteConversation}
             className="!bg-red-700 hover:!bg-red-800 !text-white !rounded-full px-6 normal-case"
-            sx={{ minWidth: "189px" }}
+            sx={{
+              minWidth: { xs: '123px', sm: '123px', md: '189px' }, // mobile vs desktop
+            }}
           >
             Delete
           </Button>
