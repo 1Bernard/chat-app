@@ -1,6 +1,11 @@
 # Full-Stack Chat Application
-
 A real-time chat application built with Next.js (frontend) and Ruby on Rails (backend). The application allows users to create conversations, send messages, and receive AI-generated responses.
+
+<img width="1915" height="943" alt="Screenshot 2025-09-23 135810" src="https://github.com/user-attachments/assets/5aa2c17d-4ae5-4a08-ab1a-5688b445ef7c" />
+<img width="1917" height="938" alt="Screenshot 2025-09-23 135837" src="https://github.com/user-attachments/assets/de05c7c2-a322-4c38-8162-109ae28a918b" />
+<img width="381" height="828" alt="Screenshot 2025-09-23 135931" src="https://github.com/user-attachments/assets/dd7b87a2-3f42-4ac7-8aa9-491ad418cf8e" />
+<img width="379" height="828" alt="Screenshot 2025-09-23 140031" src="https://github.com/user-attachments/assets/277a6d46-2e71-46ef-9894-860b3d9fa5ea" />
+<img width="387" height="828" alt="Screenshot 2025-09-23 140056" src="https://github.com/user-attachments/assets/f628030e-4eca-41e5-b923-3af1c5c17e2d" />
 
 ## Features
 
