@@ -1,0 +1,28 @@
+default: &default
+  adapter: <%= ENV["DB_ADAPTER"] %>
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: <%= ENV["DB_NAME"] %>
+  port: <%= ENV["DB_PORT"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+
+test:
+  <<: *default
+  database: <%= ENV["DB_NAME"] %>
+  port: <%= ENV["DB_PORT"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+
+production:
+  <<: *default
+  database: <%= ENV["DB_NAME"] %>
+  port: <%= ENV["DB_PORT"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
