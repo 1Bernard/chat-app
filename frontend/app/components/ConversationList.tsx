@@ -168,8 +168,15 @@ export default function ConversationList({
           sx: {
             borderRadius: "12px",
             padding: "16px",
-            maxWidth: "445px",   // instead of 600px
+            maxWidth: "445px", // fixed width
             width: "100%",
+            backgroundColor: "#FEF7FF", // modal background
+          },
+        }}
+        BackdropProps={{
+          sx: {
+            backdropFilter: "blur(4px)", // blur overlay
+            backgroundColor: "rgba(0,0,0,0.2)", // subtle dark overlay
           },
         }}
       >

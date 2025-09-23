@@ -109,8 +109,8 @@ export default function ChatWindow({ conversation }: ChatWindowProps) {
     <Box className="flex flex-col h-full">
       {/* Chat Header inside card */}
       <Box className="flex items-center px-4 py-3 border-b border-gray-200 bg-white">
-        <Box className="bg-purple-400 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mr-2">
-          🤖
+        <Box className="bg-gray-600 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mr-2">
+          <i className="fas fa-robot text-sm"></i>
         </Box>
         <Typography variant="subtitle1" className="font-semibold text-gray-700">
           Chatbot
