@@ -1,4 +1,5 @@
 # Full-Stack Chat Application
+
 A real-time chat application built with Next.js (frontend) and Ruby on Rails (backend). The application allows users to create conversations, send messages, and receive AI-generated responses.
 
 <img width="1915" height="943" alt="Screenshot 2025-09-23 135810" src="https://github.com/user-attachments/assets/5aa2c17d-4ae5-4a08-ab1a-5688b445ef7c" />
@@ -56,33 +57,33 @@ chat-app/
 
 ### Environment Variables
 
-1. Copy the example file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Choose one of the two database setups inside `.env`:
-
-   * **Supabase**: Uncomment and provide your Supabase credentials.
-   * **Local Postgres**: Keep the default values (`db`, `postgres`, `password`) if you are running with Docker.
-
-### Using Docker (Recommended)
-
-1. Clone the repository:
+1. Clone the repository and enter the project folder:
 
    ```bash
    git clone https://github.com/1Bernard/chat-app.git
    cd chat-app
    ```
 
-2. Start the application:
+2. Copy the example environment file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Choose one of the two database setups inside `.env`:
+
+   * **Supabase**: Uncomment and provide your Supabase credentials.
+   * **Local Postgres**: Keep the default values (`db`, `postgres`, `password`) if you are running with Docker.
+
+### Using Docker (Recommended)
+
+1. Start the application:
 
    ```bash
    docker-compose up --build
    ```
 
-3. Access the application:
+2. Access the application:
 
    * Frontend: [http://localhost:3001](http://localhost:3001)
    * Backend API: [http://localhost:3000](http://localhost:3000)
