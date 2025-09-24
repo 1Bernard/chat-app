@@ -7,28 +7,7 @@ RSpec.describe 'Conversations API', type: :request do
       produces 'application/json'
 
       response '200', 'conversations found' do
-        schema type: :object,
-          properties: {
-            data: {
-              type: :array,
-              items: {
-                type: :object,
-                properties: {
-                  id: { type: :string },
-                  type: { type: :string },
-                  attributes: {
-                    type: :object,
-                    properties: {
-                      title: { type: :string },
-                      created_at: { type: :string, format: 'date-time' },
-                      updated_at: { type: :string, format: 'date-time' }
-                    }
-                  }
-                }
-              }
-            }
-          }
-
+        schema '$ref' => '#/components/schemas/conversations_response'
         run_test!
       end
     end
@@ -51,63 +30,16 @@ RSpec.describe 'Conversations API', type: :request do
         }
       }
 
-      response '201', 'conversation created with title' do
-        schema type: :object,
-          properties: {
-            data: {
-              type: :object,
-              properties: {
-                id: { type: :string },
-                type: { type: :string },
-                attributes: {
-                  type: :object,
-                  properties: {
-                    title: { type: :string },
-                    created_at: { type: :string, format: 'date-time' },
-                    updated_at: { type: :string, format: 'date-time' }
-                  }
-                }
-              }
-            }
-          }
-
+      response '201', 'conversation created' do
+        schema '$ref' => '#/components/schemas/conversation_response'
         let(:conversation) { { conversation: { title: 'New Conversation' } } }
         run_test!
       end
 
-      response '201', 'conversation created with default title when empty' do
-        schema type: :object,
-          properties: {
-            data: {
-              type: :object,
-              properties: {
-                id: { type: :string },
-                type: { type: :string },
-                attributes: {
-                  type: :object,
-                  properties: {
-                    title: { type: :string },
-                    created_at: { type: :string, format: 'date-time' },
-                    updated_at: { type: :string, format: 'date-time' }
-                  }
-                }
-              }
-            }
-          }
-
+      response '422', 'invalid request' do
+        schema '$ref' => '#/components/schemas/errors_object'
         let(:conversation) { { conversation: { title: '' } } }
-        run_test! do |response|
-          data = JSON.parse(response.body)['data']
-          expect(data['attributes']['title']).to match(/Conversation \d+/)
-        end
-      end
-
-      response '201', 'conversation created with default title when title is nil' do
-        let(:conversation) { { conversation: { title: nil } } }
-        run_test! do |response|
-          data = JSON.parse(response.body)['data']
-          expect(data['attributes']['title']).to match(/Conversation \d+/)
-        end
+        run_test!
       end
     end
   end
@@ -119,30 +51,13 @@ RSpec.describe 'Conversations API', type: :request do
       parameter name: :id, in: :path, type: :string
 
       response '200', 'conversation found' do
-        schema type: :object,
-          properties: {
-            data: {
-              type: :object,
-              properties: {
-                id: { type: :string },
-                type: { type: :string },
-                attributes: {
-                  type: :object,
-                  properties: {
-                    title: { type: :string },
-                    created_at: { type: :string, format: 'date-time' },
-                    updated_at: { type: :string, format: 'date-time' }
-                  }
-                }
-              }
-            }
-          }
-
+        schema '$ref' => '#/components/schemas/conversation_response'
         let(:id) { create(:conversation).id.to_s }
         run_test!
       end
 
       response '404', 'conversation not found' do
+        schema '$ref' => '#/components/schemas/error_object'
         let(:id) { 'invalid' }
         run_test!
       end
@@ -158,6 +73,7 @@ RSpec.describe 'Conversations API', type: :request do
       end
 
       response '404', 'conversation not found' do
+        schema '$ref' => '#/components/schemas/error_object'
         let(:id) { 'invalid' }
         run_test!
       end

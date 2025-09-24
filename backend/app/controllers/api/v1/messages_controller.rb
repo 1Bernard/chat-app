@@ -19,7 +19,7 @@ module Api::V1
 
         render json: MessageSerializer.new(@message).serializable_hash, status: :created
       else
-        render json: { errors: @message.errors }, status: :unprocessable_entity
+        render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity
       end
     end
 

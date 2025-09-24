@@ -17,7 +17,7 @@ RSpec.configure do |config|
           url: 'http://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'localhost:3000'  # Change from www.example.com to localhost:3000
+              default: 'localhost:3000'
             }
           }
         }
@@ -30,30 +30,119 @@ RSpec.configure do |config|
           }
         },
         schemas: {
+          # Error schemas
+          error_object: {
+            type: :object,
+            properties: {
+              error: { 
+                type: :string,
+                example: 'Not Found'
+              },
+              message: {
+                type: :string,
+                example: 'Conversation not found'
+              }
+            }
+          },
           errors_object: {
             type: :object,
             properties: {
-              errors: { type: :object }
+              errors: { 
+                type: :array,
+                items: { type: :string },
+                example: ["Content can't be blank"]
+              }
             }
           },
-          conversation: {
+          # Success schemas
+          conversation_response: {
             type: :object,
             properties: {
-              id: { type: :integer },
-              title: { type: :string },
-              created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: 'string', format: 'date-time' }
+              data: {
+                type: :object,
+                properties: {
+                  id: { type: :string },
+                  type: { type: :string },
+                  attributes: {
+                    type: :object,
+                    properties: {
+                      title: { type: :string },
+                      created_at: { type: :string, format: 'date-time' },
+                      updated_at: { type: :string, format: 'date-time' }
+                    }
+                  }
+                }
+              }
             }
           },
-          message: {
+          conversations_response: {
             type: :object,
             properties: {
-              id: { type: :integer },
-              content: { type: :string },
-              role: { type: :string },
-              conversation_id: { type: :integer },
-              created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: 'string', format: 'date-time' }
+              data: {
+                type: :array,
+                items: {
+                  type: :object,
+                  properties: {
+                    id: { type: :string },
+                    type: { type: :string },
+                    attributes: {
+                      type: :object,
+                      properties: {
+                        title: { type: :string },
+                        created_at: { type: :string, format: 'date-time' },
+                        updated_at: { type: :string, format: 'date-time' }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          message_response: {
+            type: :object,
+            properties: {
+              data: {
+                type: :object,
+                properties: {
+                  id: { type: :string },
+                  type: { type: :string },
+                  attributes: {
+                    type: :object,
+                    properties: {
+                      content: { type: :string },
+                      role: { type: :string },
+                      conversation_id: { type: :integer },
+                      created_at: { type: :string, format: 'date-time' },
+                      updated_at: { type: :string, format: 'date-time' }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          messages_response: {
+            type: :object,
+            properties: {
+              data: {
+                type: :array,
+                items: {
+                  type: :object,
+                  properties: {
+                    id: { type: :string },
+                    type: { type: :string },
+                    attributes: {
+                      type: :object,
+                      properties: {
+                        content: { type: :string },
+                        role: { type: :string },
+                        conversation_id: { type: :integer },
+                        created_at: { type: :string, format: 'date-time' },
+                        updated_at: { type: :string, format: 'date-time' }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }

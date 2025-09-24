@@ -24,7 +24,7 @@ module Api::V1
       if @conversation.save
         render json: ConversationSerializer.new(@conversation).serializable_hash, status: :created
       else
-        render json: { errors: @conversation.errors }, status: :unprocessable_entity
+        render json: { errors: @conversation.errors.full_messages }, status: :unprocessable_entity
       end
     end
     

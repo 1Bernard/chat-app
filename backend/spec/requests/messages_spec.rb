@@ -8,35 +8,13 @@ RSpec.describe 'Messages API', type: :request do
       parameter name: :conversation_id, in: :path, type: :string
 
       response '200', 'messages found' do
-        schema type: :object,
-          properties: {
-            data: {
-              type: :array,
-              items: {
-                type: :object,
-                properties: {
-                  id: { type: :string },
-                  type: { type: :string },
-                  attributes: {
-                    type: :object,
-                    properties: {
-                      content: { type: :string },
-                      role: { type: :string },
-                      conversation_id: { type: :integer },
-                      created_at: { type: :string, format: 'date-time' },
-                      updated_at: { type: :string, format: 'date-time' }
-                    }
-                  }
-                }
-              }
-            }
-          }
-
+        schema '$ref' => '#/components/schemas/messages_response'
         let(:conversation_id) { create(:conversation).id.to_s }
         run_test!
       end
 
       response '404', 'conversation not found' do
+        schema '$ref' => '#/components/schemas/error_object'
         let(:conversation_id) { 'invalid' }
         run_test!
       end
@@ -61,39 +39,21 @@ RSpec.describe 'Messages API', type: :request do
       }
 
       response '201', 'message created' do
-        schema type: :object,
-          properties: {
-            data: {
-              type: :object,
-              properties: {
-                id: { type: :string },
-                type: { type: :string },
-                attributes: {
-                  type: :object,
-                  properties: {
-                    content: { type: :string },
-                    role: { type: :string },
-                    conversation_id: { type: :integer },
-                    created_at: { type: :string, format: 'date-time' },
-                    updated_at: { type: :string, format: 'date-time' }
-                  }
-                }
-              }
-            }
-          }
-
+        schema '$ref' => '#/components/schemas/message_response'
         let(:conversation_id) { create(:conversation).id.to_s }
         let(:message) { { message: { content: 'Hello' } } }
         run_test!
       end
 
-      response '422', 'invalid request - empty content' do
+      response '422', 'invalid request' do
+        schema '$ref' => '#/components/schemas/errors_object'
         let(:conversation_id) { create(:conversation).id.to_s }
         let(:message) { { message: { content: '' } } }
         run_test!
       end
 
       response '404', 'conversation not found' do
+        schema '$ref' => '#/components/schemas/error_object'
         let(:conversation_id) { 'invalid' }
         let(:message) { { message: { content: 'Test message' } } }
         run_test!

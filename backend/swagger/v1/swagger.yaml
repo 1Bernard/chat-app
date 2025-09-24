@@ -15,41 +15,120 @@ components:
       type: http
       scheme: bearer
   schemas:
+    error_object:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Conversation not found
     errors_object:
       type: object
       properties:
         errors:
+          type: array
+          items:
+            type: string
+          example:
+          - Content can't be blank
+    conversation_response:
+      type: object
+      properties:
+        data:
           type: object
-    conversation:
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+            attributes:
+              type: object
+              properties:
+                title:
+                  type: string
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
+    conversations_response:
       type: object
       properties:
-        id:
-          type: integer
-        title:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-    message:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              attributes:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+    message_response:
       type: object
       properties:
-        id:
-          type: integer
-        content:
-          type: string
-        role:
-          type: string
-        conversation_id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+            attributes:
+              type: object
+              properties:
+                content:
+                  type: string
+                role:
+                  type: string
+                conversation_id:
+                  type: integer
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
+    messages_response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              attributes:
+                type: object
+                properties:
+                  content:
+                    type: string
+                  role:
+                    type: string
+                  conversation_id:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
 paths:
   "/api/v1/conversations":
     get:
@@ -62,28 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        type:
-                          type: string
-                        attributes:
-                          type: object
-                          properties:
-                            title:
-                              type: string
-                            created_at:
-                              type: string
-                              format: date-time
-                            updated_at:
-                              type: string
-                              format: date-time
+                "$ref": "#/components/schemas/conversations_response"
     post:
       summary: Creates a conversation
       tags:
@@ -91,7 +149,9 @@ paths:
       parameters: []
       responses:
         '201':
-          description: conversation created with default title when title is nil
+          description: conversation created
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -122,28 +182,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      type:
-                        type: string
-                      attributes:
-                        type: object
-                        properties:
-                          title:
-                            type: string
-                          created_at:
-                            type: string
-                            format: date-time
-                          updated_at:
-                            type: string
-                            format: date-time
+                "$ref": "#/components/schemas/conversation_response"
         '404':
           description: conversation not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_object"
     delete:
       summary: Deletes a conversation
       tags:
@@ -176,34 +221,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        type:
-                          type: string
-                        attributes:
-                          type: object
-                          properties:
-                            content:
-                              type: string
-                            role:
-                              type: string
-                            conversation_id:
-                              type: integer
-                            created_at:
-                              type: string
-                              format: date-time
-                            updated_at:
-                              type: string
-                              format: date-time
+                "$ref": "#/components/schemas/messages_response"
         '404':
           description: conversation not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_object"
     post:
       summary: Creates a message
       tags:
@@ -218,7 +242,7 @@ paths:
         '201':
           description: message created
         '422':
-          description: invalid request - empty content
+          description: invalid request
         '404':
           description: conversation not found
       requestBody:
