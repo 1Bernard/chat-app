@@ -124,13 +124,6 @@ cd backend
 bundle exec rspec
 ```
 
-#### Frontend
-
-```bash
-cd frontend
-npm test
-```
-
 ## Deployment
 
 For production, ensure `.env` has the correct Supabase credentials (or local DB settings) and run:
