@@ -47,7 +47,7 @@ export default function ChatWindow({ conversation }: ChatWindowProps) {
     }
   }, [conversation?.id, mutate]);
 
-    const handleSendMessage = async () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim() || !conversation || isSending) return;
 
     try {
