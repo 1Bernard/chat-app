@@ -47,7 +47,7 @@ export default function ChatWindow({ conversation }: ChatWindowProps) {
     }
   }, [conversation?.id, mutate]);
 
-  const handleSendMessage = async () => {
+    const handleSendMessage = async () => {
     if (!inputValue.trim() || !conversation || isSending) return;
 
     try {
@@ -55,8 +55,9 @@ export default function ChatWindow({ conversation }: ChatWindowProps) {
       const content = inputValue.trim();
       setInputValue('');
 
-      const tempMessage: TempMessage = {
-        id: `temp-${Date.now()}`,
+      // Create optimistic user message
+      const tempUserMessage: TempMessage = {
+        id: `temp-user-${Date.now()}`,
         content,
         role: 'user',
         conversation_id: conversation.id,
@@ -64,30 +65,36 @@ export default function ChatWindow({ conversation }: ChatWindowProps) {
         isOptimistic: true
       };
 
-      setOptimisticMessages(prev => [...prev, tempMessage]);
+      setOptimisticMessages(prev => [...prev, tempUserMessage]);
+      setShowTypingIndicator(true);
 
+      // Send message to API
       await api.post(`/conversations/${conversation.id}/messages`, {
         message: { content }
       });
 
-      setShowTypingIndicator(true);
+      // Wait 2 seconds to show typing indicator (as per requirements)
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
-      setTimeout(async () => {
-        setShowTypingIndicator(false);
-        await mutate();
-        setOptimisticMessages(prev => prev.filter(msg => msg.id !== tempMessage.id));
-        setIsSending(false);
-      }, 2500);
+      // Now refresh messages to get the AI response
+      await mutate();
+
+      // Hide typing indicator and remove optimistic message
+      setShowTypingIndicator(false);
+      setOptimisticMessages(prev => 
+        prev.filter(msg => msg.id !== tempUserMessage.id)
+      );
+
     } catch (error) {
       console.error('Failed to send message:', error);
-      setOptimisticMessages(prev =>
+      setOptimisticMessages(prev => 
         prev.filter(msg => !isTempMessage(msg) || !msg.isOptimistic)
       );
-      setIsSending(false);
       setShowTypingIndicator(false);
+    } finally {
+      setIsSending(false);
     }
   };
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();

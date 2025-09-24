@@ -2,36 +2,32 @@ import useSWR from 'swr';
 import { Message } from '../types';
 import { api } from '../lib/api';
 
-const fetcher = (url: string) => api.get(url).then(res => {
-  // Handle JSON:API format by extracting data from attributes
-  if (res.data && Array.isArray(res.data.data)) {
-    return {
-      data: res.data.data.map((item: any) => ({
-        id: item.id,
-        ...item.attributes
-      }))
-    };
+const fetcher = async (url: string) => {
+  const response = await api.get(url);
+  // Handle JSON:API format
+  if (response.data?.data) {
+    return response.data.data.map((item: any) => ({
+      id: item.id,
+      ...item.attributes
+    }));
   }
-  return res.data;
-});
+  return [];
+};
 
 export const useMessages = (conversationId: number | null) => {
-  const { data, error, mutate } = useSWR<{ data: Message[] }>(
+  const { data, error, mutate, isLoading } = useSWR<Message[]>(
     conversationId ? `/conversations/${conversationId}/messages` : null,
     fetcher,
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      refreshInterval: 0
+      revalidateOnReconnect: true,
+      dedupingInterval: 5000 // Prevent duplicate requests within 5 seconds
     }
   );
 
-  // Extract messages from JSON:API response
-  const messages = data?.data || [];
-
   return {
-    messages,
-    isLoading: !error && !data,
+    messages: data || [],
+    isLoading: isLoading && !error,
     isError: error,
     mutate
   };

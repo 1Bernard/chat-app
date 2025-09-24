@@ -14,10 +14,11 @@ module Api::V1
       @message.role = :user
 
       if @message.save
-        # Schedule bot response only if this is a user message
-        BotResponseJob.set(wait: 2.seconds).perform_later(@conversation.id)
-
-        render json: MessageSerializer.new(@message).serializable_hash, status: :created
+        create_ai_response(@conversation)
+        
+        # Return both messages in the response
+        @messages = @conversation.messages.order(created_at: :asc)
+        render json: MessageSerializer.new(@messages).serializable_hash, status: :created
       else
         render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity
       end
@@ -31,6 +32,25 @@ module Api::V1
 
     def message_params
       params.require(:message).permit(:content)
+    end
+
+    def create_ai_response(conversation)
+      # Don't create a response if the last message is already from the bot
+      last_message = conversation.messages.last
+      return if last_message&.bot?
+
+      # Create AI response immediately
+      bot_response = generate_bot_response(conversation)
+      
+      conversation.messages.create!(
+        content: bot_response,
+        role: :bot
+      )
+    end
+
+    def generate_bot_response(conversation)
+      # Simple response as per requirements
+      "This is an AI generated response"
     end
   end
 end

@@ -13,25 +13,29 @@ export default function MessageBubble({ message, isOptimistic = false }: Message
   return (
     <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div className="max-w-[75%]">
-        <div className={`flex items-end space-x-2 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isUser ? 'bg-purple-600' : 'bg-gray-600'} text-white`}>
-            {isUser ? (
-              <i className="fas fa-user text-sm"></i>
-            ) : (
-              <i className="fas fa-robot text-sm"></i>
-            )}
+        <div className={`flex items-end gap-2 ${isUser ? 'flex-row-reverse' : ''}`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+            isUser ? 'bg-purple-600' : 'bg-gray-600'
+          } text-white`}>
+            <i className={`fas ${isUser ? 'fa-user' : 'fa-robot'} text-sm`}></i>
           </div>
-          <div className={`${isUser ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-2xl ${isOptimistic ? 'opacity-80' : ''}`}>
-            {message.content}
-            {isOptimistic && (
-              <span className="ml-2 text-xs opacity-70">
-                <i className="fas fa-circle-notch fa-spin"></i>
-              </span>
-            )}
+          <div className={`px-4 py-2 rounded-2xl ${
+            isUser 
+              ? 'bg-purple-600 text-white' 
+              : 'bg-gray-200 text-gray-800'
+          } ${isOptimistic ? 'opacity-70' : ''}`}>
+            <div className="flex items-center gap-2">
+              <span>{message.content}</span>
+              {isOptimistic && (
+                <i className="fas fa-circle-notch fa-spin text-xs"></i>
+              )}
+            </div>
           </div>
         </div>
         {timestamp && (
-          <div className={`text-xs text-gray-500 mt-1 ${isUser ? 'text-right mr-10' : 'ml-10'}`}>
+          <div className={`text-xs text-gray-500 mt-1 ${
+            isUser ? 'text-right mr-10' : 'ml-10'
+          }`}>
             {timestamp}
           </div>
         )}

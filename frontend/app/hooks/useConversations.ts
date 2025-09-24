@@ -2,27 +2,25 @@ import useSWR from 'swr';
 import { Conversation } from '../types';
 import { api } from '../lib/api';
 
-const fetcher = (url: string) => api.get(url).then(res => {
-  console.log('Conversations API response:', res.data);
-  return res.data;
-});
+const fetcher = async (url: string) => {
+  const response = await api.get(url);
+  return response.data?.data || [];
+};
+
 export const useConversations = () => {
-  const { data, error, mutate } = useSWR<{ data: Conversation[] }>(
+  const { data, error, mutate, isLoading } = useSWR<Conversation[]>(
     '/conversations',
     fetcher,
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      refreshInterval: 0
+      revalidateOnReconnect: true,
+      dedupingInterval: 10000
     }
   );
 
-  // Extract conversations from the JSON:API response
-  const conversations = data?.data || [];
-
   return {
-    conversations,
-    isLoading: !error && !data,
+    conversations: data || [],
+    isLoading: isLoading && !error,
     isError: error,
     mutate
   };
