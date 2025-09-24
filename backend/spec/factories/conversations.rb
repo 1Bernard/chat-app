@@ -1,5 +1,11 @@
 FactoryBot.define do
   factory :conversation do
-    title { Faker::Lorem.words(number: 3).join(' ') }
+    title { "Test Conversation" }
+    
+    trait :with_messages do
+      after(:create) do |conversation|
+        create_list(:message, 3, conversation: conversation)
+      end
+    end
   end
 end

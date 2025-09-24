@@ -7,16 +7,26 @@ RSpec.describe 'Conversations API', type: :request do
       produces 'application/json'
 
       response '200', 'conversations found' do
-        schema type: :array,
-          items: {
-            type: :object,
-            properties: {
-              id: { type: :integer },
-              title: { type: :string },
-              created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
-            },
-            required: [ 'id', 'title', 'created_at', 'updated_at' ]
+        schema type: :object,
+          properties: {
+            data: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  id: { type: :string },
+                  type: { type: :string },
+                  attributes: {
+                    type: :object,
+                    properties: {
+                      title: { type: :string },
+                      created_at: { type: :string, format: 'date-time' },
+                      updated_at: { type: :string, format: 'date-time' }
+                    }
+                  }
+                }
+              }
+            }
           }
 
         run_test!
@@ -32,22 +42,72 @@ RSpec.describe 'Conversations API', type: :request do
           conversation: {
             type: :object,
             properties: {
-              title: { type: :string }
-            },
-            required: [ 'title' ]
+              title: { 
+                type: :string,
+                description: 'Optional title. If blank, will be auto-generated as "Conversation {number}"'
+              }
+            }
           }
-        },
-        required: [ 'conversation' ]
+        }
       }
 
-      response '201', 'conversation created' do
+      response '201', 'conversation created with title' do
+        schema type: :object,
+          properties: {
+            data: {
+              type: :object,
+              properties: {
+                id: { type: :string },
+                type: { type: :string },
+                attributes: {
+                  type: :object,
+                  properties: {
+                    title: { type: :string },
+                    created_at: { type: :string, format: 'date-time' },
+                    updated_at: { type: :string, format: 'date-time' }
+                  }
+                }
+              }
+            }
+          }
+
         let(:conversation) { { conversation: { title: 'New Conversation' } } }
         run_test!
       end
 
-      response '422', 'invalid request' do
+      response '201', 'conversation created with default title when empty' do
+        schema type: :object,
+          properties: {
+            data: {
+              type: :object,
+              properties: {
+                id: { type: :string },
+                type: { type: :string },
+                attributes: {
+                  type: :object,
+                  properties: {
+                    title: { type: :string },
+                    created_at: { type: :string, format: 'date-time' },
+                    updated_at: { type: :string, format: 'date-time' }
+                  }
+                }
+              }
+            }
+          }
+
         let(:conversation) { { conversation: { title: '' } } }
-        run_test!
+        run_test! do |response|
+          data = JSON.parse(response.body)['data']
+          expect(data['attributes']['title']).to match(/Conversation \d+/)
+        end
+      end
+
+      response '201', 'conversation created with default title when title is nil' do
+        let(:conversation) { { conversation: { title: nil } } }
+        run_test! do |response|
+          data = JSON.parse(response.body)['data']
+          expect(data['attributes']['title']).to match(/Conversation \d+/)
+        end
       end
     end
   end
@@ -56,19 +116,29 @@ RSpec.describe 'Conversations API', type: :request do
     get 'Retrieves a conversation' do
       tags 'Conversations'
       produces 'application/json'
-      parameter name: :id, in: :path, type: :integer
+      parameter name: :id, in: :path, type: :string
 
       response '200', 'conversation found' do
         schema type: :object,
           properties: {
-            id: { type: :integer },
-            title: { type: :string },
-            created_at: { type: :string, format: 'date-time' },
-            updated_at: { type: :string, format: 'date-time' }
-          },
-          required: [ 'id', 'title', 'created_at', 'updated_at' ]
+            data: {
+              type: :object,
+              properties: {
+                id: { type: :string },
+                type: { type: :string },
+                attributes: {
+                  type: :object,
+                  properties: {
+                    title: { type: :string },
+                    created_at: { type: :string, format: 'date-time' },
+                    updated_at: { type: :string, format: 'date-time' }
+                  }
+                }
+              }
+            }
+          }
 
-        let(:id) { Conversation.create(title: 'Test').id }
+        let(:id) { create(:conversation).id.to_s }
         run_test!
       end
 
@@ -80,10 +150,10 @@ RSpec.describe 'Conversations API', type: :request do
 
     delete 'Deletes a conversation' do
       tags 'Conversations'
-      parameter name: :id, in: :path, type: :integer
+      parameter name: :id, in: :path, type: :string
 
       response '204', 'conversation deleted' do
-        let(:id) { Conversation.create(title: 'Test').id }
+        let(:id) { create(:conversation).id.to_s }
         run_test!
       end
 

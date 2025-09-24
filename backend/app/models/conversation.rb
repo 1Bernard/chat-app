@@ -1,8 +1,6 @@
 class Conversation < ApplicationRecord
   has_many :messages, dependent: :destroy
 
-  validates :title, presence: true
-
   before_validation :set_default_title, on: :create
   after_create :create_initial_message
 

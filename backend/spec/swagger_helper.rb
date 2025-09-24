@@ -5,7 +5,7 @@ RSpec.configure do |config|
 
   # Define OpenAPI documents
   config.openapi_specs = {
-    'v1/openapi.json' => {
+    'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
         title: 'Chat API',
@@ -17,7 +17,7 @@ RSpec.configure do |config|
           url: 'http://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'localhost:3000'
+              default: 'localhost:3000'  # Change from www.example.com to localhost:3000
             }
           }
         }
@@ -42,7 +42,7 @@ RSpec.configure do |config|
               id: { type: :integer },
               title: { type: :string },
               created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
+              updated_at: { type: 'string', format: 'date-time' }
             }
           },
           message: {
@@ -53,7 +53,7 @@ RSpec.configure do |config|
               role: { type: :string },
               conversation_id: { type: :integer },
               created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
+              updated_at: { type: 'string', format: 'date-time' }
             }
           }
         }
@@ -61,5 +61,5 @@ RSpec.configure do |config|
     }
   }
 
-  config.openapi_format = :json
+  config.openapi_format = :yaml
 end

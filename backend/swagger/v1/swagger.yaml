@@ -1,0 +1,238 @@
+---
+openapi: 3.0.1
+info:
+  title: Chat API
+  version: v1
+  description: API documentation for the Chat Application
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    errors_object:
+      type: object
+      properties:
+        errors:
+          type: object
+    conversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    message:
+      type: object
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        role:
+          type: string
+        conversation_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+paths:
+  "/api/v1/conversations":
+    get:
+      summary: Retrieves all conversations
+      tags:
+      - Conversations
+      responses:
+        '200':
+          description: conversations found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        attributes:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+    post:
+      summary: Creates a conversation
+      tags:
+      - Conversations
+      parameters: []
+      responses:
+        '201':
+          description: conversation created with default title when title is nil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversation:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: Optional title. If blank, will be auto-generated
+                        as "Conversation {number}"
+  "/api/v1/conversations/{id}":
+    get:
+      summary: Retrieves a conversation
+      tags:
+      - Conversations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: conversation found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                      attributes:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+        '404':
+          description: conversation not found
+    delete:
+      summary: Deletes a conversation
+      tags:
+      - Conversations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: conversation deleted
+        '404':
+          description: conversation not found
+  "/api/v1/conversations/{conversation_id}/messages":
+    get:
+      summary: Retrieves all messages for a conversation
+      tags:
+      - Messages
+      parameters:
+      - name: conversation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: messages found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        attributes:
+                          type: object
+                          properties:
+                            content:
+                              type: string
+                            role:
+                              type: string
+                            conversation_id:
+                              type: integer
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+        '404':
+          description: conversation not found
+    post:
+      summary: Creates a message
+      tags:
+      - Messages
+      parameters:
+      - name: conversation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: message created
+        '422':
+          description: invalid request - empty content
+        '404':
+          description: conversation not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                  required:
+                  - content
+              required:
+              - message

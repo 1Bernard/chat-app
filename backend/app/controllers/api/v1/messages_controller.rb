@@ -14,7 +14,7 @@ module Api::V1
       @message.role = :user
 
       if @message.save
-        # Schedule bot response
+        # Schedule bot response only if this is a user message
         BotResponseJob.set(wait: 2.seconds).perform_later(@conversation.id)
 
         render json: MessageSerializer.new(@message).serializable_hash, status: :created

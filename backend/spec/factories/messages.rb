@@ -1,7 +1,17 @@
 FactoryBot.define do
   factory :message do
-    content { Faker::Lorem.sentence }
-    role { [ :user, :bot ].sample }
+    content { "Test message" }
+    role { :user }
     association :conversation
+
+    trait :bot do
+      role { :bot }
+      content { "Bot response" }
+    end
+
+    trait :user do
+      role { :user }
+      content { "User message" }
+    end
   end
 end
