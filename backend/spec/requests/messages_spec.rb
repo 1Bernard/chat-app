@@ -38,8 +38,9 @@ RSpec.describe 'Messages API', type: :request do
         required: ['message']
       }
 
+      # CHANGE: This now correctly returns all messages for the conversation
       response '201', 'message created' do
-        schema '$ref' => '#/components/schemas/message_response'
+        schema '$ref' => '#/components/schemas/message_response' # This now expects an array
         let(:conversation_id) { create(:conversation).id.to_s }
         let(:message) { { message: { content: 'Hello' } } }
         run_test!

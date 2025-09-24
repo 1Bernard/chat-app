@@ -1,6 +1,9 @@
 class Conversation < ApplicationRecord
   has_many :messages, dependent: :destroy
 
+  # Add validation for title length to enable 422 responses
+  validates :title, length: { maximum: 255 }
+
   before_validation :set_default_title, on: :create
   after_create :create_initial_message
 

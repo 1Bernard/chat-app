@@ -16,11 +16,12 @@ module Api::V1
       if @message.save
         create_ai_response(@conversation)
         
-        # Return both messages in the response
+        # Return all messages (including the new ones) for the conversation
         @messages = @conversation.messages.order(created_at: :asc)
         render json: MessageSerializer.new(@messages).serializable_hash, status: :created
       else
-        render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity
+        # CHANGE: Update status code
+        render json: { errors: @message.errors.full_messages }, status: :unprocessable_content
       end
     end
 

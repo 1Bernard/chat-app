@@ -36,9 +36,10 @@ RSpec.describe 'Conversations API', type: :request do
         run_test!
       end
 
+      # CHANGE: Update to test for title that's too long instead of blank
       response '422', 'invalid request' do
         schema '$ref' => '#/components/schemas/errors_object'
-        let(:conversation) { { conversation: { title: '' } } }
+        let(:conversation) { { conversation: { title: 'a' * 256 } } } # 256 characters - too long
         run_test!
       end
     end

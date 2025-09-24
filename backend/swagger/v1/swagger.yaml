@@ -54,6 +54,21 @@ components:
                 updated_at:
                   type: string
                   format: date-time
+            relationships:
+              type: object
+              properties:
+                messages:
+                  type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          type:
+                            type: string
     conversations_response:
       type: object
       properties:
@@ -81,27 +96,42 @@ components:
       type: object
       properties:
         data:
-          type: object
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-            attributes:
-              type: object
-              properties:
-                content:
-                  type: string
-                role:
-                  type: string
-                conversation_id:
-                  type: integer
-                created_at:
-                  type: string
-                  format: date-time
-                updated_at:
-                  type: string
-                  format: date-time
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              attributes:
+                type: object
+                properties:
+                  content:
+                    type: string
+                  role:
+                    type: string
+                  conversation_id:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+              relationships:
+                type: object
+                properties:
+                  conversation:
+                    type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          type:
+                            type: string
     messages_response:
       type: object
       properties:

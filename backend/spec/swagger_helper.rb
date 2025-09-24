@@ -70,6 +70,26 @@ RSpec.configure do |config|
                       created_at: { type: :string, format: 'date-time' },
                       updated_at: { type: :string, format: 'date-time' }
                     }
+                  },
+                  relationships: {
+                    type: :object,
+                    properties: {
+                      messages: {
+                        type: :object,
+                        properties: {
+                          data: {
+                            type: :array,
+                            items: {
+                              type: :object,
+                              properties: {
+                                id: { type: :string },
+                                type: { type: :string }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -98,22 +118,43 @@ RSpec.configure do |config|
               }
             }
           },
+          # CHANGE: Update message_response to expect array for create response
           message_response: {
             type: :object,
             properties: {
               data: {
-                type: :object,
-                properties: {
-                  id: { type: :string },
-                  type: { type: :string },
-                  attributes: {
-                    type: :object,
-                    properties: {
-                      content: { type: :string },
-                      role: { type: :string },
-                      conversation_id: { type: :integer },
-                      created_at: { type: :string, format: 'date-time' },
-                      updated_at: { type: :string, format: 'date-time' }
+                type: :array,
+                items: {
+                  type: :object,
+                  properties: {
+                    id: { type: :string },
+                    type: { type: :string },
+                    attributes: {
+                      type: :object,
+                      properties: {
+                        content: { type: :string },
+                        role: { type: :string },
+                        conversation_id: { type: :integer },
+                        created_at: { type: :string, format: 'date-time' },
+                        updated_at: { type: :string, format: 'date-time' }
+                      }
+                    },
+                    relationships: {
+                      type: :object,
+                      properties: {
+                        conversation: {
+                          type: :object,
+                          properties: {
+                            data: {
+                              type: :object,
+                              properties: {
+                                id: { type: :string },
+                                type: { type: :string }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
