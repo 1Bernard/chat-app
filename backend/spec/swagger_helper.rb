@@ -34,7 +34,7 @@ RSpec.configure do |config|
           error_object: {
             type: :object,
             properties: {
-              error: { 
+              error: {
                 type: :string,
                 example: 'Not Found'
               },
@@ -47,10 +47,10 @@ RSpec.configure do |config|
           errors_object: {
             type: :object,
             properties: {
-              errors: { 
+              errors: {
                 type: :array,
                 items: { type: :string },
-                example: ["Content can't be blank"]
+                example: [ "Content can't be blank" ]
               }
             }
           },

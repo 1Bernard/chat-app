@@ -3,14 +3,14 @@ class BotResponseJob < ApplicationJob
 
   def perform(conversation_id)
     conversation = Conversation.find(conversation_id)
-    
+
     # Don't create a response if the last message is already from the bot
     last_message = conversation.messages.last
     return if last_message&.bot?
 
     # Simulate AI response - replace with actual AI service integration
     bot_response = generate_bot_response(conversation)
-    
+
     conversation.messages.create!(
       content: bot_response,
       role: :bot

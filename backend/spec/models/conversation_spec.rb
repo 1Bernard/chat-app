@@ -33,10 +33,10 @@ RSpec.describe Conversation, type: :model do
       it 'increments conversation number correctly' do
         conversation1 = Conversation.create(title: '')
         conversation2 = Conversation.create(title: '')
-        
+
         number1 = conversation1.title.match(/Conversation (\d+)/)[1].to_i
         number2 = conversation2.title.match(/Conversation (\d+)/)[1].to_i
-        
+
         expect(number2).to eq(number1 + 1)
       end
     end

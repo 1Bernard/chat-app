@@ -32,10 +32,10 @@ RSpec.describe 'Messages API', type: :request do
             properties: {
               content: { type: :string }
             },
-            required: ['content']
+            required: [ 'content' ]
           }
         },
-        required: ['message']
+        required: [ 'message' ]
       }
 
       # CHANGE: This now correctly returns all messages for the conversation

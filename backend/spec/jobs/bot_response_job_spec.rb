@@ -9,7 +9,7 @@ RSpec.describe BotResponseJob, type: :job do
     it 'creates a bot response message when last message is from user' do
       # Create a user message to trigger bot response (without assigning to variable)
       create(:message, conversation: conversation, role: :user)
-      
+
       expect {
         BotResponseJob.perform_now(conversation.id)
       }.to change(Message, :count).by(1)

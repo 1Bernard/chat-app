@@ -21,7 +21,7 @@ RSpec.describe 'Conversations API', type: :request do
           conversation: {
             type: :object,
             properties: {
-              title: { 
+              title: {
                 type: :string,
                 description: 'Optional title. If blank, will be auto-generated as "Conversation {number}"'
               }
